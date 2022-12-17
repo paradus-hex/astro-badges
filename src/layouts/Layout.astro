@@ -1,0 +1,89 @@
+---
+import Footer from '../components/Footer.astro';
+import TrackVitals from '../components/TrackVitals.astro';
+export interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = "Astro Badges",
+  description = "Badges to show off your Astro pride",
+} = Astro.props;
+const ogImgURL = new URL("/ogimg.jpg", Astro.site).href;
+const ogImgAlt = "The text “Astro Badges” with a purple illustration of a rocket launching in the background";
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const navItems = [
+  { text: "Badges", href: "/bwa/" },
+  { text: "Contributors", href: "/contributors/" },
+];
+---
+
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- OpenGraph Tags -->
+    <meta property="og:title" content={title} />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="en" />
+    <meta property="og:image" content={ogImgURL} />
+    <meta property="og:image:alt" content={ogImgAlt} />
+    <meta name="description" property="og:description" content={description} />
+    <meta property="og:site_name" content="Astro Badges" />
+
+    <!-- Twitter Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="swithinbank" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImgURL} />
+    <meta name="twitter:image:alt" content={ogImgAlt} />
+
+    <script>
+      import { inject } from '@vercel/analytics';
+      inject();
+    </script>
+  </head>
+
+  <body class="h-full bg-neutral-900 text-neutral-50 flex flex-col">
+    <header class="flex justify-between p-4">
+      <a href="/" class="font-black">
+        <span aria-hidden="true">📛</span>
+        Astro Badges
+      </a>
+      <nav>
+        <ul class="flex flex-wrap gap-x-4">
+          {
+            navItems.map(({ href, text }) => (
+              <li>
+                <a {href} class="text-accent-300 hover:underline">
+                  {text}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </header>
+    <main class="px-4 py-12 md:py-24">
+      <div class="max-w-3xl mx-auto">
+        <slot />
+      </div>
+    </main>
+    <div class="mt-auto">
+      <Footer />
+    </div>
+    <style is:global>
+      .astro-code {
+        @apply p-4 select-all text-left text-sm;
+      }
+    </style>
+    <TrackVitals />
+  </body>
+</html>
